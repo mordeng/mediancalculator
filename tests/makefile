@@ -17,7 +17,6 @@ INCLUDES=\
  
 SRCS=\
 	$(TEST_DIR)/default.cpp\
-	$(SRC_PATH)/testfile.cpp\
 	$(TEST_DIR)/test1.cpp
  
 OBJS=$(SRCS:.cpp=.o)
