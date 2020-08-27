@@ -3,13 +3,13 @@
 #include "testfile.hpp"
 
 
-using namespace std;
+// using namespace std;
 
 
-TEST_CASE( "Runnin class", "[init]" ) {
+// TEST_CASE( "Runnin class", "[init]" ) {
 
-	testfile t;
+// 	testfile t;
 
-    REQUIRE( t.test(1) == 3 );
+//     REQUIRE( t.test(1) == 3 );
    
-}
+// }
