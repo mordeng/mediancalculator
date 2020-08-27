@@ -1,5 +1,4 @@
 #include <iostream>
-#include "testfile.hpp"
 #include "Mediancalculator.hpp"
 #include <vector>
 using namespace std;

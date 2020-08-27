@@ -19,3 +19,11 @@ Successfully tested on Ubuntu 7.5.0-3ubuntu1 18.04 with g++.
 
 UnitTest Framework: catch2 https://github.com/catchorg/Catch2
 
+
+# Runnng
+
+Edit ressources/numbers.json
+
+	cd src/
+	./runner "../ressources/numbers.json"
+
