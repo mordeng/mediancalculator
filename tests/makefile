@@ -17,6 +17,7 @@ INCLUDES=\
  
 SRCS=\
 	$(TEST_DIR)/default.cpp\
+	$(TEST_DIR)/../src/Mediancalculator.cpp\
 	$(TEST_DIR)/test1.cpp
  
 OBJS=$(SRCS:.cpp=.o)

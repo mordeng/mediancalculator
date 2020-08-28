@@ -1,14 +1,13 @@
 #pragma once
-
+#include <vector>
 class Mediancalculator {
 public:
 
 	Mediancalculator();
 	~Mediancalculator();
-	void ParseNumerArrayJson(const char * path);
+	double ParesNumbersandGetMedian(const char * path);
 
-	// https://www.geeksforgeeks.org/program-for-mean-and-median-of-an-unsorted-array/
-	double findMedian(double a[], unsigned int n);
+	double findMedian(std::vector<double> NumberVector);
 
 
 
