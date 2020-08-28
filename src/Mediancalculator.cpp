@@ -96,11 +96,18 @@ double Mediancalculator::ParesNumbersandGetMedian(const char * path){
 		Document parser;
 		parser.Parse(NumbersJson.c_str(), NumbersJson.length());
 
-		assert(parser.IsObject());
-		assert(parser.HasMember("numbers"));
 
+		if(parser.IsObject()==0 || parser.HasMember("numbers")==0){
+
+			return -72;
+		}
+		
 		const Value& numberarray = parser["numbers"];
-		assert(numberarray.IsArray());
+
+		if(numberarray.IsArray()==0){
+
+			return -72;
+		}
 		unsigned int arraySize=numberarray.Size();
 
 
