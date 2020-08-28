@@ -1,4 +1,3 @@
-#include "Mediancalculator.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
@@ -6,96 +5,136 @@
 #include <fstream>
 #include <string.h>
 #include <algorithm>    // std::sort
+#include <vector>
+
+#include "Mediancalculator.hpp"
 using namespace rapidjson;
 using namespace std;
+
+
 Mediancalculator::Mediancalculator() {
 
 
 }
 
-
-//sourcce: http://www.cplusplus.com/forum/general/198284/
 // Function for calculating median 
-double Mediancalculator::findMedian(double a[], unsigned int n)
+double Mediancalculator::findMedian(vector<double> NumberVector)
 { 
     // First we sort the array 
-    sort(a, a+n); 
-  
-    // check for even case 
-    if (n % 2 != 0) 
-       return (double)a[n/2]; 
-      
-    return (double)(a[(n-1)/2] + a[n/2])/2.0; 
+
+
+	unsigned int begin=0;
+	unsigned int end= NumberVector.size();
+
+	unsigned int vsize=end;
+
+
+	sort(NumberVector.begin(), NumberVector.end()); 
+
+	//find start-position of values we want to calculate the median with
+	while(begin<end && NumberVector[begin]<= (-70)){
+
+		begin++;
+
+	}
+
+	//find end-position of values we want to calculate the median with
+	while(end>begin && (NumberVector[end-1] > 2279999999)){
+		end--;
+
+	}
+
+
+	//print number array with markings
+	for (unsigned int i = 0; i < vsize; ++i)
+	{
+
+		if(i>=begin && i<end){
+			printf("\033[0;32m%.2f, ",NumberVector[i] );  	
+		}else{
+			printf("\033[1;31m%.2f, ",NumberVector[i] );  	
+		}
+	}
+	printf("\033[0;0m\n" );  	
+
+
+
+	//create subset of numbers to calculate median
+	vector<double> realNumberVector(&NumberVector[begin], &NumberVector[end]); 
+
+	vsize=realNumberVector.size();
+
+	if (vsize % 2 != 0) 
+		return (double)realNumberVector[vsize/2]; 
+
+	return (double)(realNumberVector[(vsize-1)/2] + realNumberVector[vsize/2])/2.0; 
 } 
-  
-
-
-void Mediancalculator::ParseNumerArrayJson(const char * path){
-
- string line;
 
 
 
-	printf("this is my path %s\n", path );
+double Mediancalculator::ParesNumbersandGetMedian(const char * path){
 
-  ifstream myfile (path);
-  // if (myfile.is_open())
-  // {
-  //   while ( getline (myfile,line) )
-  //   {
-  //     cout << line << '\n';
-  //   }
-  //   myfile.close();
-  // }
+	string line;
 
-  // else cout << "Unable to open file"; 
+	printf("this is the path I got %s\n", path );
 
+	ifstream myfile (path);
 
+	if (myfile.is_open())
+	{
 
-std::string NumbersJson;
+		std::string NumbersJson;
 
-myfile.seekg(0, std::ios::end);   
-NumbersJson.reserve(myfile.tellg());
-myfile.seekg(0, std::ios::beg);
+		myfile.seekg(0, std::ios::end);   
+		NumbersJson.reserve(myfile.tellg());
+		myfile.seekg(0, std::ios::beg);
 
-NumbersJson.assign((std::istreambuf_iterator<char>(myfile)),
-std::istreambuf_iterator<char>());
+		NumbersJson.assign((std::istreambuf_iterator<char>(myfile)),
+			std::istreambuf_iterator<char>());
 
 
-printf("get char array %s\n",NumbersJson.c_str() );
+		Document parser;
+		parser.Parse(NumbersJson.c_str(), NumbersJson.length());
 
-    Document parser;
-   parser.Parse(NumbersJson.c_str(), NumbersJson.length());
+		assert(parser.IsObject());
+		assert(parser.HasMember("numbers"));
 
-	assert(parser.IsObject());
-   assert(parser.HasMember("numbers"));
+		const Value& numberarray = parser["numbers"];
+		assert(numberarray.IsArray());
+		unsigned int arraySize=numberarray.Size();
 
-   const Value& numberarray = parser["numbers"];
-	assert(numberarray.IsArray());
-	unsigned int arraySize=numberarray.Size();
 
-	double* lliNumberArray = NULL;   // Pointer to int, initialize to nothing.
-
-	lliNumberArray = new double[arraySize];  // Allocate n ints and save ptr in a.
+		vector<double> lliNumberVector; 
 
 
 	for (unsigned int i = 0; i < arraySize; i++) {// Uses SizeType instead of size_t
-			   lliNumberArray[i]=numberarray[i].GetInt();
 
-	        // printf("a[%d] = %d\n", i, lliNumberArray[i]);
+		
+		if(numberarray[i].IsInt64()==0){
 
+			printf("Invalid sign found in input array\n");
+
+			return -72;
+		}
+		lliNumberVector.push_back(numberarray[i].GetInt64());
 
 
 	}
 
-		int quantityOfNum{0};
+	double median= findMedian(lliNumberVector);
 
+	printf("Median = %.2f\n\n\n", median);
 
+	myfile.close();
 
-    cout << "Median = " << findMedian(lliNumberArray, arraySize) << arraySize << endl;  
+	return median;
 
+}else{
 
-delete [] lliNumberArray;  // When done, free memory pointed to by a.
+	printf("unable to open file %s\n", path );
+	return -71;
+
+}
 }
 
 Mediancalculator::~Mediancalculator() {}

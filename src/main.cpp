@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
 
      for (int i = 1; i < cmdlineStringArgs.size(); ++i)
     {
-		median.ParseNumerArrayJson(cmdlineStringArgs[i].c_str());
+		median.ParesNumbersandGetMedian(cmdlineStringArgs[i].c_str());
     }
 
 
